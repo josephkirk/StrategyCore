@@ -79,7 +79,8 @@ void UStrategyCorePlayerHeroComponent::OnRegister()
 void UStrategyCorePlayerHeroComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ZoomMappings.SetActiveCameraMode ( DetermineCameraMode() ); 
+	ZoomMappings = ZoomMappingsData->CameraModeTriggerMapping;
 }
 
 void UStrategyCorePlayerHeroComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -268,6 +269,17 @@ void UStrategyCorePlayerHeroComponent::Input_DragCamera(const FInputActionValue&
 
 void UStrategyCorePlayerHeroComponent::Input_ZoomCamera(const FInputActionValue& InputActionValue)
 {
+	const float Value = InputActionValue.Get<float>();
+	AbilityCameraMode = nullptr;
+	if (Value > 0.0f)
+	{
+		ZoomMappings.LowerCameraMode();
+	} else {
+		ZoomMappings.NextCameraMode();
+	}
+	if (ZoomMappings.CurrentCameraMode() != nullptr && AbilityCameraMode == nullptr) {
+		AbilityCameraMode = ZoomMappings.CurrentCameraMode();
+	}
 }
 
 void UStrategyCorePlayerHeroComponent::Input_EdgeScrollCamera(const FInputActionValue& InputActionValue)

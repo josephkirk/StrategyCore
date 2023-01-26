@@ -14,6 +14,7 @@
 #include "LyraCameraMode_RTSCamera.generated.h"
 
 class USceneComponent;
+
 /**
  * 
  */

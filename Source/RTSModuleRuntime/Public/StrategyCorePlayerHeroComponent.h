@@ -17,8 +17,10 @@
 #include "Input/LyraInputComponent.h"
 #include "GameplayTagContainer.h"
 #include "GameplayTagsManager.h"
+#include "LyraCameraModeTriggerMapping.h"
 #include "StrategyCorePlayerHeroComponent.generated.h"
 
+class ULyraCameraModesMappingData;
 class UGameFrameworkComponentManager;
 class UInputComponent;
 class ULyraCameraMode;
@@ -36,6 +38,7 @@ struct FCameraMovementCommand
 	float Scale;
 	FGameplayTagContainer CameraTag;
 };
+
 
 /**
  * 
@@ -62,24 +65,29 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Lyra")
 		ALyraCharacter* GetLyraCharacter();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "StrategyCoreCamera - Edge Scroll Settings")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "StrategyCoreCamera | Edge Scroll Settings")
 		bool EnableEdgeScrolling=true;
+
 	UPROPERTY(
 		BlueprintReadWrite,
 		EditAnywhere,
-		Category = "StrategyCoreCamera - Edge Scroll Settings",
+		Category = "StrategyCoreCamera | Edge Scroll Settings",
 		meta = (EditCondition = "EnableEdgeScrolling")
 	)
 		float EdgeScrollSpeed = 50;
+
 	UPROPERTY(
 		BlueprintReadWrite,
 		EditAnywhere,
-		Category = "StrategyCoreCamera - Edge Scroll Settings",
+		Category = "StrategyCoreCamera | Edge Scroll Settings",
 		meta = (EditCondition = "EnableEdgeScrolling")
 	)
 		float DistanceFromEdgeThreshold = 0.05f;
 
 protected:
+
+	UPROPERTY(EditDefaultsOnly, Category = "StrategyCoreCamera | Zoom Mappings")
+		TObjectPtr<const ULyraCameraModesMappingData> ZoomMappingsData;
 
 	virtual void OnRegister() override;
 	virtual void BeginPlay() override;
@@ -121,5 +129,7 @@ private:
 		FVector2D DragStartLocation;
 	UPROPERTY()
 		float DragExtent=0.01f;
+
+	FLyraCameraModesMapping ZoomMappings;
 };
 
